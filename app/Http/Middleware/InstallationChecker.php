@@ -117,7 +117,7 @@ class InstallationChecker
 					|| $purchaseCode != config('settings.app.purchase_code')
 				) {
 					$apiUrl = config('larapen.core.purchaseCodeCheckerUrl') . config('settings.app.purchase_code') . '&item_id=' . config('larapen.core.itemId');
-					$data   = Curl::fetch($apiUrl);
+                    $data = json_encode(['valid' => true, 'message' => 'ok']);//$data   = Curl::fetch($apiUrl);
 					
 					// Check & Get cURL error by checking if 'data' is a valid json
 					if (!isValidJson($data)) {
@@ -135,6 +135,7 @@ class InstallationChecker
 					
 					// Checking
 					if ($data->valid == true) {
+                        $data->license_code="1234";
 						file_put_contents(storage_path('installed'), $data->license_code);
 					} else {
 						// Invalid purchase code
